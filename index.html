@@ -194,7 +194,7 @@
       // 修复箭头函数作用域问题（SyntaxError）
    <script>
     // ====== 修复后的iUp模块 ======
-    var iUp = (function () {
+   var iUp = (function () {
         var time = 0;
         var duration = 150;
         
@@ -203,7 +203,6 @@
                 time = 0; 
             },
             up: function(element) {
-                var _this = this;
                 setTimeout(function() {
                     element.classList.add("up");
                 }, time);
@@ -213,7 +212,6 @@
                 element.classList.remove("up");
             },
             toggle: function(element) {
-                var _this = this;
                 setTimeout(function() {
                     element.classList.toggle("up");
                 }, time);
@@ -304,35 +302,49 @@
 
 
         // 主初始化
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.iUp').forEach(iUp.up);
-            loadBingBackground();
-            initMobileMenu();
-
-            // 增强的一言获取
-            fetch('https://v1.hitokoto.cn')
-                .then(response => {
-                    if (!response.ok) throw new Error('网络响应异常');
-                    return response.json();
-                })
-                .then(data => {
-                    const target = document.getElementById('hitokoto');
-                    if (target) {
-                        target.innerHTML = `${data.hitokoto}<br/><footer>-「${data.from}」</footer>`;
-                    }
-                })
-                .catch(() => {
-                    const defaultQuote = document.getElementById('hitokoto');
-                    defaultQuote.innerHTML = `<p>如何得与凉风约，不共尘沙一并来！</p><footer>-「中牟道中」</footer>`;
-                });
-
-            // 头像加载处理
-            const avatar = document.querySelector('.js-avatar');
-            if (avatar) {
-                avatar.addEventListener('load', () => avatar.style.opacity = 1);
-                if (avatar.complete) avatar.style.opacity = 1;
-            }
+         document.addEventListener('DOMContentLoaded', function () {
+        // 初始化动画
+        document.querySelectorAll('.iUp').forEach(element => {
+            iUp.up(element);
         });
+
+        // 加载背景
+        loadBingBackground();
+
+        // 初始化移动端菜单
+        initMobileMenu();
+
+        // 预加载头像
+        const avatar = new Image();
+        const avatarElement = document.querySelector('.js-avatar');
+        if(avatarElement) {
+            avatar.src = avatarElement.src;
+        }
+
+        // 加载一言
+        fetch('https://v1.hitokoto.cn')
+            .then(response => {
+                if (!response.ok) throw new Error('网络响应异常');
+                return response.json();
+            })
+            .then(data => {
+                const target = document.getElementById('hitokoto');
+                if (target) {
+                    target.innerHTML = `${data.hitokoto}<br/><footer>-「${data.from}」</footer>`;
+                }
+            })
+            .catch(() => {
+                const defaultQuote = document.getElementById('hitokoto');
+                defaultQuote.innerHTML = `<p>如何得与凉风约，不共尘沙一并来！</p><footer>-「中牟道中」</footer>`;
+            });
+
+        // 头像加载处理
+        const avatarImg = document.querySelector('.js-avatar');
+        if (avatarImg) {
+            avatarImg.addEventListener('load', () => avatarImg.style.opacity = 1);
+            if (avatarImg.complete) avatarImg.style.opacity = 1;
+        }
+    });
     </script>
 </body>
 </html>
