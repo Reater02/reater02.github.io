@@ -20,7 +20,7 @@
     <link rel="icon" type="image/png" href="https://unpkg.com/dmego-home-page@latest/favicon.ico">
 
     <style>
-        /* 图片容器样式 */
+        /* 基础样式 */
         .img-placeholder {
             position: absolute;
             width: 120px;
@@ -31,19 +31,16 @@
             animation: placeholder-wave 1.6s ease infinite;
         }
 
-        /* 动画定义 */
         @keyframes placeholder-wave {
             0% { background-position: 200% 0; }
             100% { background-position: -200% 0; }
         }
 
-        /* 头像容器调整 */
         .ih-item.circle {
             width: 120px;
             height: 120px;
         }
 
-        /* 社交图标布局 */
         .navigation--social {
             display: flex;
             justify-content: center;
@@ -60,6 +57,48 @@
             transform: translateY(-3px);
         }
 
+        /* 背景图相关样式 */
+        .panel-cover {
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
+                       var(--dynamic-bg, linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)) 
+                       center/cover no-repeat fixed;
+            min-height: 100vh;
+            transition: background-image 0.8s ease;
+        }
+
+        .bg-loader {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 999;
+        }
+
+        .bg-copyright {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.8em;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            background: rgba(0,0,0,0.2);
+            padding: 4px 8px;
+            border-radius: 4px;
+            backdrop-filter: blur(2px);
+            max-width: 60vw;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         /* 响应式调整 */
         @media (max-width: 768px) {
             .img-placeholder {
@@ -73,16 +112,16 @@
             .navigation--social {
                 gap: 1.5rem;
             }
+            .panel-cover {
+                background-attachment: scroll;
+            }
         }
     </style>
 </head>
 
 <body>
-    <!-- 移动端菜单按钮 -->
-    <span class="mobile btn-mobile-menu">
-        <i class="social iconfont icon-list btn-mobile-menu__icon"></i>
-        <i class="social iconfont icon-angleup btn-mobile-close__icon hidden"></i>
-    </span>
+    <!-- 加载指示器 -->
+    <div class="bg-loader" id="bgLoader"></div>
 
     <!-- 主内容区 -->
     <header id="panel" class="panel-cover">
@@ -176,6 +215,56 @@
     <!-- 脚本 -->
     <script src="https://unpkg.com/dmego-home-page@latest/assets/js/main.js"></script>
     <script>
+        // 动态加载背景图
+        (async function() {
+            const bgLoader = document.getElementById('bgLoader');
+            const header = document.querySelector('.panel-cover');
+            let copyrightEl = null;
+
+            try {
+                // 显示加载动画
+                bgLoader.style.opacity = '1';
+                
+                // 获取图片数据
+                const response = await fetch('/assets/json/images.json?t=' + Date.now());
+                const jsonText = await response.text();
+                
+                // 解析JSONP格式数据
+                const imgPaths = JSON.parse(jsonText.match(/$$.*?$$/s)[0]);
+                if (!Array.isArray(imgPaths)) throw new Error('Invalid data format');
+                
+                // 随机选择图片
+                const randomIndex = Math.floor(Math.random() * imgPaths.length);
+                const imgUrl = 'https://www.bing.com' + imgPaths[randomIndex];
+                
+                // 预加载图片
+                await new Promise((resolve, reject) => {
+                    const img = new Image();
+                    img.src = imgUrl;
+                    img.onload = resolve;
+                    img.onerror = reject;
+                    setTimeout(() => reject('加载超时'), 10000);
+                });
+
+                // 应用背景
+                header.style.setProperty('--dynamic-bg', `url(${imgUrl})`);
+                
+                // 添加版权信息
+                copyrightEl = document.createElement('div');
+                copyrightEl.className = 'bg-copyright';
+                copyrightEl.textContent = 'Bing每日壁纸';
+                document.body.appendChild(copyrightEl);
+
+            } catch (error) {
+                console.error('背景加载失败:', error);
+                // 保持默认渐变背景
+            } finally {
+                // 隐藏加载动画
+                bgLoader.style.opacity = '0';
+                setTimeout(() => bgLoader.remove(), 300);
+            }
+        })();
+
         // 图片加载监控
         document.querySelectorAll('img[loading="lazy"]').forEach(img => {
             const loadHandler = () => img.style.opacity = 1;
