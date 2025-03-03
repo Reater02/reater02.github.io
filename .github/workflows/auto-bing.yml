@@ -1,35 +1,76 @@
 name: Auto Update Bing Images CI
 
 on:
-  workflow_dispatch:
+  workflow_dispatch:  # 保留手动触发
   schedule:
-    - cron: "0 1 * * *"
+    - cron: "0 1 * * *"  # 保持北京时间 9:00 的定时任务
   push:
     branches: [ gh-pages ]
+    paths:  # 新增路径过滤
+      - 'assets/js/bing.js'
+      - 'assets/json/images.json'
   pull_request:
     branches: [ gh-pages ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:  # 明确权限声明
+      contents: write
+      pull-requests: write
+      
     steps:
-    # checkout
-    - name: checkout
-      uses: actions/checkout@v2
-    # setup nodejs
-    - name: Use Node.js
-      uses: actions/setup-node@v2
+    # 步骤 1: 检出代码
+    - name: Checkout repository
+      uses: actions/checkout@v4  # 升级到最新稳定版
       with:
-        node-version: 12.x
-    - run: node ./assets/js/bing.js
-    # commit
-    - name: commit file
+        fetch-depth: 0  # 获取完整提交历史
+
+    # 步骤 2: Node.js 环境
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'  # 升级到 LTS 版本
+        cache: 'npm'
+
+    # 步骤 3: 安装依赖
+    - name: Install dependencies
+      run: npm ci  # 比 npm install 更严格的依赖安装
+      working-directory: ./assets/js
+
+    # 步骤 4: 执行脚本
+    - name: Run Bing image updater
+      run: node ./assets/js/bing.js
+      env:
+        NODE_ENV: production
+      timeout-minutes: 5  # 设置超时限制
+
+    # 步骤 5: 提交变更
+    - name: Commit changes
+      id: commit
       run: |
-        git config --local user.email 'github-actions[bot]@users.noreply.github.com'
-        git config --local user.name 'github-actions[bot]'
-        git diff --exit-code || git add . && git commit -am '[bot] update images.json' --allow-empty
-    # push 
-    - name: push changes
-      uses: ad-m/github-push-action@master
+        # 检测是否有文件变更
+        if git diff --exit-code; then
+          echo "No changes to commit"
+          exit 0
+        else
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "github-actions@users.noreply.github.com"
+          git add -A
+          git commit -m "[Automation] Update Bing wallpapers $(date +'%Y-%m-%d')" --no-verify
+          echo "has_changes=true" >> $GITHUB_OUTPUT
+        fi
+
+    # 步骤 6: 推送变更
+    - name: Push changes
+      if: steps.commit.outputs.has_changes == 'true'
+      uses: actions/github-script@v7  # 使用官方 action 更安全
       with:
-        github_token: ${{ secrets.GH_TOKEN }}
+        script: |
+          await github.rest.git.updateRef({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: 'heads/gh-pages',
+            sha: context.sha,
+            force: true
+          })
