@@ -2,7 +2,6 @@
 <html lang="zh-CN">
 
 <head>
-    <!-- 保持原有meta和link部分不变 -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,7 +20,7 @@
     <link rel="icon" type="image/png" href="https://unpkg.com/dmego-home-page@latest/favicon.ico">
 
     <style>
-        /* 原有样式保持不变 */
+        /* 基础样式保持不变 */
         .img-placeholder {
             position: absolute;
             width: 120px;
@@ -58,7 +57,7 @@
             transform: translateY(-3px);
         }
 
-        /* 更新背景图样式 */
+        /* 背景图相关样式 */
         .panel-cover {
             background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
                        var(--dynamic-bg, linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)) 
@@ -124,15 +123,99 @@
     <!-- 加载指示器 -->
     <div class="bg-loader" id="bgLoader"></div>
 
-    <!-- 主内容区（保持原有结构不变） -->
+    <!-- 主内容区 -->
     <header id="panel" class="panel-cover">
-        <!-- 原有header内容保持不变 -->
+        <div class="panel-main">
+            <div class="panel-main__inner panel-inverted">
+                <div class="panel-main__content">
+                    <!-- 头像部分 -->
+                    <div class="ih-item circle effect right_to_left">
+                        <a href="#" class="blog-button">
+                            <div class="img">
+                                <div class="img-placeholder"></div>
+                                <img src="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@gh-pages/assets/img/personlogo.webp"
+                                    data-fallback="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@gh-pages/assets/img/personlogo.jpg"
+                                    alt="Reater头像"
+                                    class="js-avatar iUp profilepic"
+                                    loading="lazy"
+                                    width="120"
+                                    height="120"
+                                    onerror="this.onerror=null;this.src=this.dataset.fallback">
+                            </div>
+                            <div class="info iUp">
+                                <div class="info-back">
+                                    <h2>Star</h2>
+                                    <p>Shine</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- 标题区 -->
+                    <h1 class="panel-cover__title panel-title iUp">
+                        <a href="#">Reater</a>
+                    </h1>
+                    <p class="panel-cover__subtitle panel-subtitle iUp">Everything Will Be Better</p>
+                    <hr class="panel-cover__divider iUp">
+
+                    <!-- 诗句引用 -->
+                    <blockquote class="panel-cover__description iUp">
+                        <p>如何得与凉风约，不共尘沙一并来！</p>
+                        <footer>-「中牟道中」</footer>
+                    </blockquote>
+
+                    <!-- 导航菜单 -->
+                    <div class="navigation-wrapper iUp">
+                        <nav class="cover-navigation cover-navigation--primary">
+                            <ul class="navigation">
+                                <li class="navigation__item"><a href="/" class="blog-button">首页</a></li>
+                                <li class="navigation__item"><a href="https://reater.cn:7070/" target="_blank" rel="noopener noreferrer" class="blog-button">Rcloud</a></li>
+                                <li class="navigation__item"><a href="https://reater.cn:5001/" target="_blank" rel="noopener noreferrer" class="blog-button">群晖NAS</a></li>
+                                <li class="navigation__item"><a href="https://github.com/Reater02/Reater02.github.io" target="_blank" rel="noopener noreferrer" class="blog-button">关于本站</a></li>
+                            </ul>
+                        </nav>
+
+                        <!-- 社交链接 -->
+                        <nav class="cover-navigation navigation--social">
+                            <ul class="navigation">
+                                <li class="navigation__item">
+                                    <a href="https://github.com/Reater02" target="_blank" rel="noopener noreferrer" title="GitHub">
+                                        <i class="social iconfont icon-github"></i>
+                                    </a>
+                                </li>
+                                <li class="navigation__item">
+                                    <a href="https://www.zhihu.com/people/reater" target="_blank" rel="noopener noreferrer" title="知乎">
+                                        <i class="social iconfont icon-zhihu"></i>
+                                    </a>
+                                </li>
+                                <li class="navigation__item">
+                                    <a href="mailto:601632132@qq.com" title="邮箱">
+                                        <i class="social iconfont icon-email"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-cover--overlay cover-slate"></div>
+        </div>
+
+        <!-- 页脚 -->
+        <div class="remark iUp">
+            <p class="power">
+                Powered by 
+                <a href="https://hitokoto.cn/" target="_blank" rel="noopener noreferrer">Hitokoto</a> 
+                & 
+                <a href="https://www.jsdelivr.com/" target="_blank" rel="noopener noreferrer">jsDelivr</a>
+            </p>
+        </div>
     </header>
 
     <!-- 脚本 -->
     <script src="https://unpkg.com/dmego-home-page@latest/assets/js/main.js"></script>
     <script>
-        // 动态加载背景图（修正版）
+        // 动态加载背景图（最终修正版）
         (async function() {
             const bgLoader = document.getElementById('bgLoader');
             const header = document.querySelector('.panel-cover');
@@ -145,30 +228,31 @@
                 const response = await fetch('/assets/json/images.json?t=' + Date.now());
                 const jsonText = await response.text();
                 
-                // 修正正则表达式提取数组
-                const jsonArray = JSON.parse(
+                // 正确解析JSONP格式
+                const jsonData = JSON.parse(
                     jsonText
                         .replace(/^getBingImages$/, '')
-                        .replace(/$;?\s*$/, '')
+                        .replace(/$;?\s*$/, '')  // 处理结尾符号
+                        .trim()
                 );
 
-                // 随机选择图片并生成有效URL
-                const randomPath = jsonArray[Math.floor(Math.random() * jsonArray.length)];
+                // 随机选择图片路径
+                const randomPath = jsonData[Math.floor(Math.random() * jsonData.length)];
                 const imgUrl = `https://www.bing.com${randomPath}`;
-                
-                // 预加载图片
+
+                // 预加载验证
                 await new Promise((resolve, reject) => {
                     const img = new Image();
-                    img.onload = resolve;
+                    img.onload = () => {
+                        header.style.setProperty('--dynamic-bg', `url(${imgUrl})`);
+                        resolve();
+                    };
                     img.onerror = () => reject(new Error('图片加载失败'));
                     img.src = imgUrl;
                     setTimeout(() => reject('加载超时'), 10000);
                 });
 
-                // 应用背景
-                header.style.setProperty('--dynamic-bg', `url(${imgUrl})`);
-
-                // 生成可读的版权信息
+                // 生成可读版权信息
                 const copyrightMatch = randomPath.match(/OHR\.(\w+?)_/);
                 const copyrightText = copyrightMatch 
                     ? `${copyrightMatch[1].replace(/([A-Z])/g, ' $1').trim()} (Bing每日壁纸)`
@@ -196,7 +280,7 @@
             }
         })();
 
-        // 图片加载监控（保持原有逻辑）
+        // 图片加载监控
         document.querySelectorAll('img[loading="lazy"]').forEach(img => {
             const loadHandler = () => img.style.opacity = 1;
             
