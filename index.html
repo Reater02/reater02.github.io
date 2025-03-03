@@ -1,39 +1,108 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 
 <head>
-    <!-- Meta, title, CSS, favicons, etc. -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Reater Home">
-    <meta name="keywords" content="Reater,Homepage">
+    <meta name="description" content="Reater的个人主页">
+    <meta name="keywords" content="Reater, 个人主页, 技术博客">
     <meta name="author" content="Reater">
     <title>Reater02</title>
-    <link rel="stylesheet" type="text/css" href="https://unpkg.com/dmego-home-page@latest/assets/css/onlinewebfonts.css"/>
-    <link rel="stylesheet" type="text/css" href="https://unpkg.com/dmego-home-page@latest/assets/css/vno.css">
-    <link rel="stylesheet" type="text/css" href="https://unpkg.com/dmego-home-page@latest/assets/css/iconfont.css">
-    <link rel="apple-touch-icon" href="https://unpkg.com/dmego-home-page@latest/apple-touch-icon.png">
-    <link rel="icon" href="https://unpkg.com/dmego-home-page@latest/favicon.ico">
+    
+    <!-- 样式表 -->
+    <link rel="stylesheet" href="https://unpkg.com/dmego-home-page@latest/assets/css/onlinewebfonts.css">
+    <link rel="stylesheet" href="https://unpkg.com/dmego-home-page@latest/assets/css/vno.css">
+    <link rel="stylesheet" href="https://unpkg.com/dmego-home-page@latest/assets/css/iconfont.css">
+    
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="https://unpkg.com/dmego-home-page@latest/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="https://unpkg.com/dmego-home-page@latest/favicon.ico">
+
+    <style>
+        /* 图片容器样式 */
+        .img-placeholder {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(120deg, #ececec 25%, #f5f5f5 37%, #ececec 63%);
+            background-size: 200% 100%;
+            animation: placeholder-wave 1.6s ease infinite;
+        }
+
+        /* 动画定义 */
+        @keyframes placeholder-wave {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* 头像容器调整 */
+        .ih-item.circle {
+            width: 120px;
+            height: 120px;
+        }
+
+        /* 社交图标布局 */
+        .navigation--social {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .navigation--social .iconfont {
+            font-size: 2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .navigation--social a:hover .iconfont {
+            transform: translateY(-3px);
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .img-placeholder {
+                width: 100px;
+                height: 100px;
+            }
+            .ih-item.circle {
+                width: 100px;
+                height: 100px;
+            }
+            .navigation--social {
+                gap: 1.5rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
+    <!-- 移动端菜单按钮 -->
     <span class="mobile btn-mobile-menu">
         <i class="social iconfont icon-list btn-mobile-menu__icon"></i>
         <i class="social iconfont icon-angleup btn-mobile-close__icon hidden"></i>
     </span>
+
+    <!-- 主内容区 -->
     <header id="panel" class="panel-cover">
         <div class="panel-main">
             <div class="panel-main__inner panel-inverted">
                 <div class="panel-main__content">
-                    <div class="ih-item circle effect right_to_left">            
-                        <a href="#" title="" class="blog-button">
-                              <div class="img">
-                                  <img src="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@abd9ec5de12ab1ab42dfd87e4c5f76116ac5a249/assets/img/personlogo.jpg" 
-                                      alt="头像"
-                                      class="js-avatar iUp profilepic"
-                                      loading="lazy">
-                              </div>
+                    <!-- 头像部分 -->
+                    <div class="ih-item circle effect right_to_left">
+                        <a href="#" class="blog-button">
+                            <div class="img">
+                                <div class="img-placeholder"></div>
+                                <img src="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@gh-pages/assets/img/personlogo.webp"
+                                    data-fallback="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@gh-pages/assets/img/personlogo.jpg"
+                                    alt="Reater头像"
+                                    class="js-avatar iUp profilepic"
+                                    loading="lazy"
+                                    width="120"
+                                    height="120"
+                                    onerror="this.onerror=null;this.src=this.dataset.fallback">
+                            </div>
                             <div class="info iUp">
                                 <div class="info-back">
                                     <h2>Star</h2>
@@ -42,81 +111,86 @@
                             </div>
                         </a>
                     </div>
+
+                    <!-- 标题区 -->
                     <h1 class="panel-cover__title panel-title iUp">
-                        <a href="#" title="Reater Home">Reater</a>
+                        <a href="#">Reater</a>
                     </h1>
-                    <p class="panel-cover__subtitle panel-subtitle iUp">Everything will be better</p>
-                    <hr class="panel-cover__divider iUp" />
-                    <p id="description" class="panel-cover__description iUp">
-                        如何得与凉风约, 不共尘沙一并来!
-                        <br/>
-                        <strong><cite>-「中牟道中」</cite></strong>
-                    </p>
+                    <p class="panel-cover__subtitle panel-subtitle iUp">Everything Will Be Better</p>
+                    <hr class="panel-cover__divider iUp">
+
+                    <!-- 诗句引用 -->
+                    <blockquote class="panel-cover__description iUp">
+                        <p>如何得与凉风约，不共尘沙一并来！</p>
+                        <footer>-「中牟道中」</footer>
+                    </blockquote>
+
+                    <!-- 导航菜单 -->
                     <div class="navigation-wrapper iUp">
-                        <div>
-                            <nav class="cover-navigation cover-navigation--primary">
-                                <ul class="navigation">
-                                    <li class="navigation__item">
-                                        <a href="/" class="blog-button">首页</a>
-                                    </li>
-                                    <li class="navigation__item">
-                                        <a href="https://reater.cn:7070/" class="blog-button" target="_blank">Rcloud</a>
-                                    </li>
-                                    <li class="navigation__item">
-                                        <a href="https://reater.cn:5001/" class="blog-button" target="_blank">群晖NAS</a>
-                                    </li>
-                                    <li class="navigation__item">
-                                        <a href="https://github.com/Reater02/Reater02.github.io" class="blog-button" target="_blank">关于网页</a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
-                        <div class="iUp">
-                            <nav class="cover-navigation navigation--social">
-                                <ul class="navigation">
-                                    <li class="navigation__item">
-                                        <a href="https://github.com/Reater02" title="github" target="_blank">
-                                            <i class='social iconfont icon-github'></i>
-                                            <span class="label">github</span>
-                                        </a>
-                                    </li>
-                                    <li class="navigation__item">
-                                        <a href="https://qm.qq.com/cgi-bin/qm/qr?k=zE_A23Y2xh8hqf2Ahm4Arlj-e7deASwi&noverify=0&personal_qrcode_source=4" title="QQ群" target="_blank">
-                                            <i class='social iconfont icon-qq'></i>
-                                            <span class="label">QQ群</span>
-                                        </a>
-                                    </li>
-                                    <li class="navigation__item">
-                                        <a href="https://www.zhihu.com/people/reater" title="zhihu" target="_blank">
-                                            <i class='social iconfont icon-zhihu'></i>
-                                            <span class="label">zhihu</span>
-                                        </a>
-                                    </li>
-                                    <li class="navigation__item">
-                                        <a href="mailto:601632132@qq.com" title="邮箱">
-                                            <i class='social iconfont icon-email'></i>
-                                            <span class="label">邮箱</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
+                        <nav class="cover-navigation cover-navigation--primary">
+                            <ul class="navigation">
+                                <li class="navigation__item"><a href="/" class="blog-button">首页</a></li>
+                                <li class="navigation__item"><a href="https://reater.cn:7070/" target="_blank" rel="noopener noreferrer" class="blog-button">Rcloud</a></li>
+                                <li class="navigation__item"><a href="https://reater.cn:5001/" target="_blank" rel="noopener noreferrer" class="blog-button">群晖NAS</a></li>
+                                <li class="navigation__item"><a href="https://github.com/Reater02/Reater02.github.io" target="_blank" rel="noopener noreferrer" class="blog-button">关于本站</a></li>
+                            </ul>
+                        </nav>
+
+                        <!-- 社交链接 -->
+                        <nav class="cover-navigation navigation--social">
+                            <ul class="navigation">
+                                <li class="navigation__item">
+                                    <a href="https://github.com/Reater02" target="_blank" rel="noopener noreferrer" title="GitHub">
+                                        <i class="social iconfont icon-github"></i>
+                                    </a>
+                                </li>
+                                <li class="navigation__item">
+                                    <a href="https://www.zhihu.com/people/reater" target="_blank" rel="noopener noreferrer" title="知乎">
+                                        <i class="social iconfont icon-zhihu"></i>
+                                    </a>
+                                </li>
+                                <li class="navigation__item">
+                                    <a href="mailto:601632132@qq.com" title="邮箱">
+                                        <i class="social iconfont icon-email"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
                     </div>
                 </div>
             </div>
             <div class="panel-cover--overlay cover-slate"></div>
         </div>
 
-            <p class="power">Powered By 
-                <a href="https://github.com/features/actions" target="_blank">GitHub Actions</a>, 
-                <a href="https://hitokoto.cn/" target="_blank">Hitokoto</a> 
-                and
-                <a href="https://www.jsdelivr.com/" target="_blank">jsDelivr CDN</a>
+        <!-- 页脚 -->
+        <div class="remark iUp">
+            <p class="power">
+                Powered by 
+                <a href="https://hitokoto.cn/" target="_blank" rel="noopener noreferrer">Hitokoto</a> 
+                & 
+                <a href="https://www.jsdelivr.com/" target="_blank" rel="noopener noreferrer">jsDelivr</a>
             </p>
         </div>
     </header>
 
-    <script type="text/javascript" src="https://unpkg.com/dmego-home-page@latest/assets/js/main.js"></script>
-    <script type="text/javascript" src="./assets/json/images.json?cb=getBingImages"></script>
+    <!-- 脚本 -->
+    <script src="https://unpkg.com/dmego-home-page@latest/assets/js/main.js"></script>
+    <script>
+        // 图片加载监控
+        document.querySelectorAll('img[loading="lazy"]').forEach(img => {
+            const loadHandler = () => img.style.opacity = 1;
+            
+            if (img.complete) {
+                loadHandler();
+            } else {
+                img.addEventListener('load', loadHandler);
+                img.addEventListener('error', () => {
+                    if (img.dataset.fallback) {
+                        img.src = img.dataset.fallback;
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
