@@ -106,23 +106,25 @@
 <body>
     <div class="bg-status" id="bgStatus">🔄 正在加载每日壁纸...</div>
 
+     <!-- 新增移动端菜单按钮 -->
+    <button class="btn-mobile-menu icon-list" aria-label="导航菜单"></button>
+
     <header id="panel" class="panel-cover">
-        <div class="panel-main">
-            <div class="panel-main__inner panel-inverted">
-                <div class="panel-main__content">
-                    <div class="ih-item circle effect right_to_left">
-                        <a href="#" class="blog-button">
-                            <div class="img">
-                                <div class="img-placeholder"></div>
-                                <img src="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@latest/assets/img/personlogo.webp"
-                                    data-fallback="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@latest/assets/img/personlogo.jpg"
-                                    alt="Reater头像"
-                                    class="js-avatar iUp profilepic"
-                                    loading="eager"  <!-- 改为主动加载 -->
-                                decoding="async">
-                                    height="120"
-                                    onerror="this.onerror=null;this.src=this.dataset.fallback">
-                            </div>
+        <!-- 修复后的头像图片标签 -->
+        <div class="ih-item circle effect right_to_left">
+            <a href="#" class="blog-button">
+                <div class="img">
+                    <div class="img-placeholder"></div>
+                    <img src="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@latest/assets/img/personlogo.webp"
+                         data-fallback="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@latest/assets/img/personlogo.jpg"
+                         alt="Reater头像"
+                         class="js-avatar iUp profilepic"
+                         loading="eager"
+                         decoding="async"
+                         width="120"
+                         height="120"
+                         onerror="this.onerror=null;this.src=this.dataset.fallback">
+                </div>
                             <div class="info iUp">
                                 <div class="info-back">
                                     <h2>Star</h2>
@@ -265,26 +267,35 @@
         avatar.src = document.querySelector('.js-avatar').src;
     });
       
-        // 移动端菜单
+         // 优化后的移动端菜单函数
         function initMobileMenu() {
             const btn = document.querySelector('.btn-mobile-menu');
             const nav = document.querySelector('.navigation-wrapper');
             
-            if (!btn || !nav) return;
+            if (!btn || !nav) {
+                console.warn('缺少移动端菜单元素');
+                return;
+            }
 
             btn.addEventListener('click', () => {
                 const isVisible = nav.classList.contains('visible');
-                nav.classList.add('animate__animated', `animate__${isVisible ? 'fadeOutUp' : 'fadeInDown'}`);
+                const animationType = isVisible ? 'fadeOutUp' : 'fadeInDown';
                 
+                // 添加动画类
+                nav.classList.add('animate__animated', `animate__${animationType}`);
+                
+                // 动画结束后处理
                 nav.addEventListener('animationend', () => {
-                    nav.classList.remove('animate__animated', `animate__${isVisible ? 'fadeOutUp' : 'fadeInDown'}`);
+                    nav.classList.remove('animate__animated', `animate__${animationType}`);
                     nav.classList.toggle('visible', !isVisible);
+                    
+                    // 更新按钮图标
+                    btn.classList.toggle('icon-angleup');
+                    btn.classList.toggle('icon-list');
                 }, { once: true });
-
-                btn.classList.toggle('icon-angleup');
-                btn.classList.toggle('icon-list');
             });
         }
+
 
         // 主初始化
         document.addEventListener('DOMContentLoaded', () => {
