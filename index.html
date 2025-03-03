@@ -8,6 +8,7 @@
     <meta name="description" content="Reater的个人主页">
     <meta name="keywords" content="Reater, 个人主页, 技术博客">
     <meta name="author" content="Reater">
+    <meta name="msvalidate.tracking" content="disable">
     <title>Reater02</title>
     
     <!-- 样式表 -->
@@ -117,8 +118,8 @@
                                     data-fallback="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@latest/assets/img/personlogo.jpg"
                                     alt="Reater头像"
                                     class="js-avatar iUp profilepic"
-                                    loading="lazy"
-                                    width="120"
+                                    loading="eager"  <!-- 改为主动加载 -->
+                                decoding="async">
                                     height="120"
                                     onerror="this.onerror=null;this.src=this.dataset.fallback">
                             </div>
@@ -187,70 +188,83 @@
         </div>
     </header>
 
-    <script>
-        // iUp模块
-        var iUp = (function () {
-            let time = 0;
-            const duration = 150;
-            
-            return {
-                clean: () => time = 0,
-                up: element => {
-                    setTimeout(() => element.classList.add("up"), time);
-                    time += duration;
-                },
-                down: element => element.classList.remove("up"),
-                toggle: element => {
-                    setTimeout(() => element.classList.toggle("up"), time);
-                    time += duration;
-                }
-            };
-        })();
-
-        // 背景加载模块
-        async function loadBingBackground() {
-            const bgStatus = document.getElementById('bgStatus');
-            const panel = document.querySelector('#panel');
-            
-            try {
-                bgStatus.style.display = 'block';
-                const response = await fetch('https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@latest/assets/json/images.json');
-                if (!response.ok) throw new Error(`HTTP错误 ${response.status}`);
-                
-                const imgUrls = await response.json();
-                const randomIndex = Math.floor(Math.random() * imgUrls.length);
-                const imgPath = imgUrls[randomIndex];
-                const proxyUrl = 'https://corsproxy.io/?';
-                const imgUrl = proxyUrl + encodeURIComponent(`https://www.bing.com${imgPath}`);
-
-                await new Promise((resolve, reject) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        panel.style.backgroundImage = `url(${imgUrl})`;
-                        resolve();
-                    };
-                    img.onerror = () => reject(new Error('图片加载失败'));
-                    img.src = imgUrl;
-                    setTimeout(() => reject('加载超时'), 10000);
-                });
-
-                // 添加版权信息
-                const copyrightMatch = imgPath.match(/OHR\.(\w+?)_/);
-                if (copyrightMatch) {
-                    const copyrightEl = document.createElement('div');
-                    copyrightEl.className = 'bg-copyright';
-                    copyrightEl.textContent = `${copyrightMatch[1].replace(/([A-Z])/g, ' $1').trim()} (Bing每日壁纸)`;
-                    document.body.appendChild(copyrightEl);
-                }
-
-            } catch (error) {
-                console.error('背景加载失败:', error);
-                panel.style.backgroundImage = 'var(--main-gradient)';
-            } finally {
-                bgStatus.style.display = 'none';
+  <script>
+      // 修复箭头函数作用域问题（SyntaxError）
+    var iUp = (function () {
+        var time = 0;
+        var duration = 150;
+        
+        return {
+            clean: function() { time = 0; },
+            up: function(element) {
+                setTimeout(function() {
+                    element.classList.add("up");
+                }, time);
+                time += duration;
+            },
+            down: function(element) {
+                element.classList.remove("up");
+            },
+            toggle: function(element) {
+                setTimeout(function() {
+                    element.classList.toggle("up");
+                }, time);
+                time += duration;
             }
-        }
+        };
+    })();
 
+         // 增强的图片加载逻辑
+    async function loadBingBackground() {
+        const bgStatus = document.getElementById('bgStatus');
+        const panel = document.querySelector('#panel');
+        
+        try {
+            bgStatus.style.display = 'block';
+            
+            // 使用更可靠的CORS代理
+            const proxyUrl = 'https://api.allorigins.win/raw?url=';
+            const jsonResponse = await fetch(proxyUrl + encodeURIComponent('https://www.bing.com/HPImageArchive.aspx?format=js&n=8'));
+            
+            if (!jsonResponse.ok) throw new Error('数据加载失败');
+            const data = await jsonResponse.json();
+            
+            const images = data.images;
+            const randomImage = images[Math.floor(Math.random() * images.length)];
+            const imgUrl = proxyUrl + encodeURIComponent(`https://www.bing.com${randomImage.url}`);
+
+            await new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => {
+                    panel.style.backgroundImage = `url("${imgUrl}")`;
+                    resolve();
+                };
+                img.onerror = () => reject(new Error('图片加载失败'));
+                img.src = imgUrl;
+                setTimeout(() => reject('加载超时（10秒）'), 10000);
+            });
+
+            // 添加版权信息
+            const copyrightEl = document.createElement('div');
+            copyrightEl.className = 'bg-copyright';
+            copyrightEl.innerHTML = `${randomImage.copyright} (Bing每日壁纸)`;
+            document.body.appendChild(copyrightEl);
+
+        } catch (error) {
+            console.warn('使用备用背景:', error);
+            panel.style.backgroundImage = 'var(--main-gradient)';
+        } finally {
+            bgStatus.style.display = 'none';
+        }
+    }
+
+    // 优化懒加载处理
+    document.addEventListener('DOMContentLoaded', function () {
+        // 预加载关键图片
+        const avatar = new Image();
+        avatar.src = document.querySelector('.js-avatar').src;
+    });
+      
         // 移动端菜单
         function initMobileMenu() {
             const btn = document.querySelector('.btn-mobile-menu');
