@@ -1,6 +1,8 @@
-<!DOCTYPE html>
+<html>
 <html lang="zh-CN">
 <head>
+
+    <!-- Meta, title, CSS, favicons, etc. -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,433 +10,104 @@
     <meta name="keywords" content="Reater, 个人主页, 技术博客">
     <meta name="author" content="Reater">
     <title>Reater02</title>
-    
-    <!-- 样式表 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@493df04ee51240174838c80fdafe5a020f3d9c13/assets/css/onlinewebfonts.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@493df04ee51240174838c80fdafe5a020f3d9c13/assets/css/vno.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@493df04ee51240174838c80fdafe5a020f3d9c13/assets/css/iconfont.css">
-    
-    <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@493df04ee51240174838c80fdafe5a020f3d9c13/apple-touch-icon.png">
-    <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@493df04ee51240174838c80fdafe5a020f3d9c13/favicon.ico">
-
-    <style>
-        /* 基础样式 */
-        .img-placeholder {
-            position: absolute;
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: linear-gradient(120deg, #ececec 25%, #f5f5f5 37%, #ececec 63%);
-            background-size: 200% 100%;
-            animation: placeholder-wave 1.6s ease infinite;
-        }
-
-        @keyframes placeholder-wave {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-
-        .ih-item.circle {
-            width: 120px;
-            height: 120px;
-        }
-
-        .navigation--social {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .navigation--social .iconfont {
-            font-size: 2rem;
-            transition: transform 0.3s ease;
-        }
-
-        .navigation--social a:hover .iconfont {
-            transform: translateY(-3px);
-        }
-
-        /* 背景图相关样式 */
-        .panel-cover {
-            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
-                       var(--dynamic-bg, linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)) 
-                       center/cover no-repeat fixed;
-            min-height: 100vh;
-            transition: background-image 0.8s ease;
-        }
-
-        /* 加载状态指示器 */
-        .bg-status {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            color: rgba(255,255,255,0.9);
-            padding: 8px 15px;
-            background: rgba(0,0,0,0.6);
-            border-radius: 20px;
-            z-index: 999;
-            display: none;
-            backdrop-filter: blur(2px);
-        }
-
-        @media (max-width: 768px) {
-            .img-placeholder {
-                width: 100px;
-                height: 100px;
-            }
-            .ih-item.circle {
-                width: 100px;
-                height: 100px;
-            }
-            .navigation--social {
-                gap: 1.5rem;
-            }
-            .panel-cover {
-                background-attachment: scroll;
-            }
-            .bg-status {
-                font-size: 12px;
-                padding: 6px 12px;
-            }
-        }
-
-        /* 新增移动端遮罩层样式 */
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.3);
-            z-index: 999;
-            display: none;
-        }
-
-        /* 新增动画关键帧 */
-        @keyframes bounceInDown {
-            0% {
-                transform: translateY(-100%);
-                opacity: 0;
-            }
-            80% {
-                transform: translateY(0);
-                opacity: 1;
-            }
-            to {
-                transform: translateY(5px);
-                opacity: 1;
-            }
-        }
-
-        @keyframes bounceOutUp {
-            0% {
-                transform: translateY(0);
-                opacity: 1;
-            }
-            20% {
-                transform: translateY(-5px);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100%);
-                opacity: 0;
-            }
-        }
-
-        .animated {
-            animation-duration: 0.8s;
-            animation-timing-function: cubic-bezier(0.2, 0.5, 0.5, 1);
-            animation-fill-mode: both;
-        }
-
-        /* 移动端按钮样式 */
-        .btn-mobile-menu {
-            display: none;
-            position: absolute;
-            top: 2rem;
-            right: 2rem;
-            padding: 8px 12px;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            z-index: 1001;
-            background: none;
-        }
-
-        @media (max-width: 768px) {
-            .btn-mobile-menu {
-                display: block;
-            }
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@493df04ee51240174838c80fdafe5a020f3d9c13/assets/css/onlinewebfonts.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@493df04ee51240174838c80fdafe5a020f3d9c13/assets/css/vno.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@493df04ee51240174838c80fdafe5a020f3d9c13/assets/css/iconfont.css">
+    <link rel="apple-touch-icon" href="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@493df04ee51240174838c80fdafe5a020f3d9c13/apple-touch-icon.png">
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@493df04ee51240174838c80fdafe5a020f3d9c13/favicon.ico">
 </head>
-<body>
-    <!-- 加载状态提示 -->
-    <div class="bg-status" id="bgStatus">🔄 正在加载每日壁纸...</div>
 
-    <!-- 主内容区 -->
-    <header id="panel" class="panel-cover">
+<body>
+    <span class="mobile btn-mobile-menu">
+        <i class="btn-mobile-menu__icon icon-list social iconfont"></i>
+        <i class="social iconfont icon-angleup btn-mobile-close__icon hidden"></i>
+    </span>
+    <header id="panel" class="panel-cover" style="background: url(&quot;https://www.cn.bing.com/th?id=OHR.SuffragetteCity_EN-US2883743791_1920x1080.jpg&amp;rf=LaDigue_1920x1080.jpg&amp;pid=hp&quot;) center center / cover no-repeat rgb(102, 102, 102);">
         <div class="panel-main">
             <div class="panel-main__inner panel-inverted">
                 <div class="panel-main__content">
-                    <!-- 头像部分 -->
-                    <div class="ih-item circle effect right_to_left">
-                        <a href="#" class="blog-button">
-                            <div class="img">
-                                <div class="img-placeholder"></div>
-                                <img src="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@gh-pages/assets/img/personlogo.webp"
-                                    data-fallback="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@gh-pages/assets/img/personlogo.jpg"
-                                    alt="Reater头像"
-                                    class="js-avatar iUp profilepic"
-                                    loading="lazy"
-                                    width="120"
-                                    height="120"
-                                    onerror="this.onerror=null;this.src=this.dataset.fallback">
-                            </div>
-                            <div class="info iUp">
+                    <div class="ih-item circle effect right_to_left">            
+                        <a href="#" title="" class="blog-button">
+                            <div class="img"><img src="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@gh-pages/assets/img/personlogo.webp" alt="img" class="js-avatar iUp profilepic up show"></div>
+                            <div class="info iUp up">
                                 <div class="info-back">
-                                    <h2>Star</h2>
-                                    <p>Shine</p>
+                                    <h2> 
+                                        
+                                             STAR
+                                        
+                                    </h2>
+                                    <p>
+                                        
+                                            shine
+                                        
+                                    </p>
                                 </div>
                             </div>
                         </a>
                     </div>
-
-                    <!-- 标题区 -->
-                    <h1 class="panel-cover__title panel-title iUp">
-                        <a href="#">Reater</a>
+                    <h1 class="panel-cover__title panel-title iUp up">
+                        <a href="#" title="Reater Index">Reater</a>
                     </h1>
-                    <p class="panel-cover__subtitle panel-subtitle iUp">Everything Will Be Better</p>
-                    <hr class="panel-cover__divider iUp">
-
-                    <!-- 诗句引用 -->
-                    <blockquote class="panel-cover__description iUp" id="hitokoto">
-                        <p>如何得与凉风约，不共尘沙一并来！</p>
-                        <footer>-「中牟道中」</footer>
-                    </blockquote>
-
-                    <!-- 导航菜单 -->
-                    <div class="navigation-wrapper iUp">
-                        <nav class="cover-navigation cover-navigation--primary">
-                            <ul class="navigation">
-                                <li class="navigation__item"><a href="/" class="blog-button">首页</a></li>
-                                <li class="navigation__item"><a href="https://reater.cn:7070/" target="_blank" rel="noopener noreferrer" class="blog-button">Rcloud</a></li>
-                                <li class="navigation__item"><a href="https://reater.cn:5001/" target="_blank" rel="noopener noreferrer" class="blog-button">群晖NAS</a></li>
-                                <li class="navigation__item"><a href="https://github.com/Reater02/Reater02.github.io" target="_blank" rel="noopener noreferrer" class="blog-button">关于本站</a></li>
-                            </ul>
-                        </nav>
-
-                        <!-- 社交链接 -->
-                        <nav class="cover-navigation navigation--social">
-                            <ul class="navigation">
+                    <p class="panel-cover__subtitle panel-subtitle iUp up">Everything Will Be Better</p>
+                    <hr class="panel-cover__divider iUp up">
+                    <p id="description" class="panel-cover__description iUp up">我想要说的，前人们都说过了。我想要做的，有钱人都做过了。<br> -「<strong>烂泥</strong>」</p>
+                    <div class="navigation-wrapper iUp up">
+                        <div>
+                            <nav class="cover-navigation cover-navigation--primary">
+                                <ul class="navigation">
+                                    <li class="navigation__item">
+                                        <a href="/" class="blog-button">首页</a>
+                                    </li>
+                                    <li class="navigation__item">
+                                        <a href="https://reater.cn:7070/" class="blog-button" target="_blank">Rcloud</a>
+                                    </li>
+                                    <li class="navigation__item">
+                                        <a href="https://reater.cn:5001" class="blog-button" target="_blank">群晖NAS</a>
+                                    </li>
+                                    
                                 <li class="navigation__item">
-                                    <a href="https://github.com/Reater02" target="_blank" rel="noopener noreferrer" title="GitHub">
-                                        <i class="social iconfont icon-github"></i>
-                                    </a>
-                                </li>
-                                <li class="navigation__item">
-                                    <a href="https://www.zhihu.com/people/reater" target="_blank" rel="noopener noreferrer" title="知乎">
-                                        <i class="social iconfont icon-zhihu"></i>
-                                    </a>
-                                </li>
+                                        <a href="https://github.com/Reater02/Reater02.github.io" class="blog-button" target="_blank">关于本站</a>
+                                    </li></ul>
+                            </nav>
+                        </div>
+                        <div class="iUp up">
+                            <nav class="cover-navigation navigation--social">
+                                <ul class="navigation">
+                                    <li class="navigation__item">
+                                        <a href="https://github.com/Reater02/" title="github" target="_blank">
+                                            <i class="social iconfont icon-github"></i>
+                                            <span class="label">github</span>
+                                        </a>
+                                    </li>
+
+                                    <li class="navigation__item">
+                                        <a href="https://www.zhihu.com/people/reater/" title="zhihu" target="_blank">
+                                            <i class="social iconfont icon-zhihu"></i>
+                                            <span class="label">zhihu</span>
+                                        </a>
+                                    </li>
                                 <li class="navigation__item">
                                     <a href="mailto:601632132@qq.com" title="邮箱">
                                         <i class="social iconfont icon-email"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-
-                        <!-- 新增移动端菜单按钮 -->
-                        <button class="btn-mobile-menu icon-list" aria-label="菜单" tabindex="0"></button>
+                                            <span class="label">email</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="panel-cover--overlay cover-slate"></div>
         </div>
-
-        <!-- 页脚 -->
-        <div class="remark iUp">
-            <p class="power">
-                Powered by 
-                <a href="https://hitokoto.cn/" target="_blank" rel="noopener noreferrer">Hitokoto</a> 
-                & 
-                <a href="https://www.jsdelivr.com/" target="_blank" rel="noopener noreferrer">jsDelivr</a>
+        <div class="remark iUp up">
+            <p class="power">Powered By 
+                <a href="https://github.com/features/actions" target="_blank"> GitHub Actions </a> And 
+                <a href="https://hitokoto.cn/" target="_blank"> Hitokoto </a>
             </p>
         </div>
     </header>
-
-    <!-- 脚本 -->
-    <script>
-        // ================== iUp动画模块（修复语法错误） ==================
-        var iUp = (function () {
-            var time = 0;
-            var duration = 150;
-            
-            return {
-                clean: function() { time = 0; },
-                up: function(element) {
-                    setTimeout(function() {
-                        element.classList.add("up");
-                    }, time);
-                    time += duration;
-                },
-                down: function(element) {
-                    element.classList.remove("up");
-                },
-                toggle: function(element) {
-                    setTimeout(function() {
-                        element.classList.toggle("up");
-                    }, time);
-                    time += duration;
-                }
-            };
-        })();
-
-        // ================== 背景加载模块（增强版） ==================
-        async function loadBingBackground() {
-            const bgStatus = document.getElementById('bgStatus');
-            const panel = document.querySelector('#panel');
-            
-            try {
-                // 显示加载状态
-                bgStatus.style.display = 'block';
-                
-                // 获取并处理JSON数据
-                const response = await fetch('/assets/json/images.json');
-                if (!response.ok) throw new Error(`HTTP错误 ${response.status}`);
-                
-                const jsonText = await response.text();
-                
-                // 精准提取JSON数组（处理JSONP格式）
-                const jsonString = jsonText
-                    .replace(/^[^{[]*/, '')  // 移除非JSON前缀
-                    .replace(/[^}\]]*$/, '') // 移除非JSON后缀
-                    .replace(/'/g, '"');     // 统一引号格式
-                
-                const imgUrls = JSON.parse(jsonString);
-                
-                // 随机选择图片
-                const randomIndex = Math.floor(Math.random() * imgUrls.length);
-                const imgPath = imgUrls[randomIndex];
-                const imgUrl = `https://www.bing.com${imgPath}`;
-
-                // 创建测试图片（带跨域处理）
-                const img = new Image();
-                img.crossOrigin = "anonymous";
-                
-                await new Promise((resolve, reject) => {
-                    img.onload = () => {
-                        panel.style.backgroundImage = `url(${imgUrl})`;
-                        resolve();
-                    };
-                    img.onerror = () => reject(new Error('跨域加载被阻止'));
-                    img.src = imgUrl;
-                    setTimeout(() => reject('加载超时（10秒）'), 10000);
-                });
-
-                // 添加版权信息
-                const copyrightMatch = imgPath.match(/OHR\.(\w+?)_/);
-                if (copyrightMatch) {
-                    const copyrightEl = document.createElement('div');
-                    copyrightEl.className = 'bg-copyright';
-                    copyrightEl.textContent = copyrightMatch[1]
-                        .replace(/([A-Z])/g, ' $1')
-                        .trim() + ' (Bing每日壁纸)';
-                    document.body.appendChild(copyrightEl);
-                }
-
-            } catch (error) {
-                console.error('背景加载失败:', error);
-                // 降级到默认背景
-                panel.style.backgroundImage = 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)';
-            } finally {
-                bgStatus.style.display = 'none';
-            }
-        }
-
-        // ================== 移动端菜单（稳定版） ==================
-        function initMobileMenu() {
-            const btn = document.querySelector('.btn-mobile-menu');
-            const nav = document.querySelector('.navigation-wrapper');
-            const overlay = document.createElement('div');
-            overlay.className = 'overlay';
-            document.body.appendChild(overlay);
-
-            if (!btn || !nav) return;
-
-            let isAnimating = false;
-            
-            btn.addEventListener('click', () => {
-                if (isAnimating) return;
-                
-                const isVisible = nav.classList.contains('visible');
-                const animationType = isVisible ? 'bounceOutUp' : 'bounceInDown';
-                
-                // 切换遮罩层显示状态
-                overlay.style.display = isVisible ? 'none' : 'block';
-                
-                // 添加动画类
-                nav.classList.add('animated', animationType);
-                
-                isAnimating = true;
-                
-                // 更新按钮图标
-                btn.classList.toggle('icon-angleup');
-                btn.classList.toggle('icon-list');
-                
-                // 动画完成回调
-                const cleanup = () => {
-                    nav.classList.remove('animated', animationType);
-                    nav.classList.toggle('visible', !isVisible);
-                    isAnimating = false;
-                    
-                    // 动画完成后隐藏遮罩层（如果菜单已关闭）
-                    if (!nav.classList.contains('visible')) {
-                        overlay.style.display = 'none';
-                    }
-                };
-                
-                // 监听动画结束
-                nav.addEventListener('animationend', cleanup, { once: true });
-            });
-        }
-
-        // ================== 主初始化逻辑 ==================
-        document.addEventListener('DOMContentLoaded', function () {
-            // 初始化动画
-            document.querySelectorAll('.iUp').forEach(element => {
-                iUp.up(element);
-            });
-
-            // 加载背景
-            loadBingBackground();
-
-            // 初始化移动端菜单
-            initMobileMenu();
-
-            // 加载Hitokoto
-            fetch('https://v1.hitokoto.cn')
-                .then(response => response.json())
-                .then(data => {
-                    const target = document.getElementById('hitokoto');
-                    if (target) {
-                        target.innerHTML = `${data.hitokoto<br/><footer>-「${data.from}」</footer>`;
-                    }
-                })
-                .catch(error => console.error('一言加载失败:', error));
-
-            // 头像加载处理
-            const avatar = document.querySelector('.js-avatar');
-            if (avatar) {
-                avatar.addEventListener('load', function () {
-                    this.style.opacity = 1;
-                });
-                if (avatar.complete) avatar.style.opacity = 1;
-            }
-        });
-    </script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@493df04ee51240174838c80fdafe5a020f3d9c13/assets/js/main.js"></script>
+    <script type="text/javascript" src="./assets/json/images.json?cb=getBingImages"></script>
 </body>
 </html>
