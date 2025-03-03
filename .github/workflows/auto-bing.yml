@@ -3,54 +3,47 @@ name: Auto Update Bing Images CI
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 1 * * *"  # UTC时间1点（北京时间9点）
+    - cron: "0 1 * * *"
   push:
     branches: [ gh-pages ]
     paths-ignore: 
-      - 'assets/json/images.json'  # 防止循环触发
+      - 'assets/json/images.json'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # 1. 检出代码（强制gh-pages分支）
       - name: Checkout code
         uses: actions/checkout@v2
         with:
           ref: gh-pages
-          fetch-depth: 0  # 必须添加，用于检测文件变更
+          fetch-depth: 0
 
-      # 2. 设置Node.js环境（保持12.x）
       - name: Use Node.js 12.x
         uses: actions/setup-node@v2
         with:
           node-version: 12.x
 
-      # 3. 执行Bing图片抓取脚本
       - name: Run Bing Image Script
         run: node ./assets/js/bing.js
 
-      # 4. 提交变更（精准检测变更）
       - name: Commit changes
         id: commit-step
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
           
-          # 精准检测images.json变更
           if git diff --exit-code --quiet -- ./assets/json/images.json; then
-            echo "::set-output name=has_changes::false"
+            echo "has_changes=false" >> $GITHUB_OUTPUT
           else
             git add ./assets/json/images.json
             git commit -m "[Bot] Update Bing images ($(date +'%Y-%m-%d'))"
-            echo "::set-output name=has_changes::true"
+            echo "has_changes=true" >> $GITHUB_OUTPUT
           fi
 
-      # 5. 推送变更（保留原有Token配置）
       - name: Push changes
         if: github.event_name != 'pull_request' && steps.commit-step.outputs.has_changes == 'true'
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GH_TOKEN }}
           branch: gh-pages
-          force: false  # 必须关闭强制推送
