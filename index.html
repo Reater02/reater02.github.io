@@ -4,12 +4,16 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Reater的个人主页">
-    <meta name="keywords" content="Reater, 个人主页, 技术博客">
+    <meta name="description" content="Reater的个人主页，分享前端开发、项目经验和技术博客。">
+    <meta name="keywords" content="Reater, 前端开发, 技术博客, 项目分享, JavaScript, CSS">
     <meta name="author" content="Reater">
-    <meta name="msvalidate.tracking" content="disable">
-    <title>Reater02</title>
     
+    <!-- 预加载优化 -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://api.allorigins.win">
+    <link rel="dns-prefetch" href="https://api.allorigins.win">
+
     <!-- 样式表 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@latest/assets/css/onlinewebfonts.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@latest/assets/css/vno.css">
@@ -26,33 +30,29 @@
             --main-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
         }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            color: #333;
+        /* 优化后的动画效果 */
+        .iUp {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
         }
-
-        .ih-item.circle {
-            width: var(--avatar-size);
-            height: var(--avatar-size);
-            border-radius: 50%;
-            overflow: hidden;
-            position: relative;
-            margin: 40px auto;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .js-avatar {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
+        .iUp.up {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .img-placeholder {
-            display: none;
+            width: var(--avatar-size);
+            height: var(--avatar-size);
+            border-radius: 50%;
+            background: linear-gradient(120deg, #ececec 25%, #f5f5f5 37%, #ececec 63%);
+            background-size: 200% 100%;
+            animation: placeholder-wave 1.6s ease infinite;
+        }
+
+        @keyframes placeholder-wave {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
         }
 
         .navigation--social {
@@ -72,7 +72,7 @@
         }
 
         .panel-cover {
-            background: linear-gradient(rgba(0,0,0,0.3), var(--main-gradient)) center/cover no-repeat fixed;
+            background: linear-gradient(rgba(0,0,0,0.3), var(--dynamic-bg, var(--main-gradient))) center/cover no-repeat fixed;
             min-height: 100vh;
             transition: background-image 0.8s ease;
         }
@@ -105,26 +105,10 @@
             transition: transform 0.3s ease;
         }
 
-        .btn-mobile-menu:hover {
-            transform: scale(1.1);
-        }
-
-        .btn-mobile-menu:active {
-            transform: scale(0.9);
-            transition: transform 0.1s ease;
-        }
-
         @media (max-width: 768px) {
             :root {
                 --avatar-size: 100px;
                 --social-icon-size: 1.5rem;
-            }
-            .ih-item.circle {
-                margin: 20px 0;
-            }
-            .bg-status {
-                font-size: 12px;
-                padding: 6px 12px;
             }
             .btn-mobile-menu {
                 display: block;
@@ -150,34 +134,21 @@
             to { transform: translateY(0); opacity: 1; }
         }
 
-        .bg-copyright {
-            position: fixed;
-            bottom: 15px;
-            right: 20px;
-            color: rgba(255,255,255,0.8);
-            font-size: 12px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        .avatar-wrapper {
+            width: var(--avatar-size);
+            height: var(--avatar-size);
+            border-radius: 50%;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 20px;
         }
 
-        @media (prefers-color-scheme: dark) {
-            .navigation-wrapper {
-                background: #1a1a1a !important;
-            }
-            .bg-status {
-                background: #333 !important;
-            }
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        .menuSlide {
-            will-change: transform, opacity;
-        }
-
-        .img-placeholder {
-            background-color: #f0f0f0;
+        .js-avatar {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
     </style>
 </head>
@@ -188,15 +159,23 @@
     <div class="ih-item circle effect right_to_left">
         <a href="#" class="blog-button">
             <div class="avatar-wrapper">
+                <div class="img-placeholder"></div>
                 <img src="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@latest/assets/img/personlogo.webp"
                      data-fallback="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@latest/assets/img/personlogo.jpg"
                      alt="Reater头像"
                      class="js-avatar"
-                     loading="lazy"
+                     loading="eager"
                      decoding="async"
                      width="120"
                      height="120"
                      onerror="this.onerror=null;this.src=this.dataset.fallback">
+            </div>
+            
+            <div class="info iUp">
+                <div class="info-back">
+                    <h2>Star</h2>
+                    <p>Shine</p>
+                </div>
             </div>
         </a>
     </div>
@@ -208,7 +187,6 @@
     <hr class="panel-cover__divider iUp">
 
     <blockquote class="panel-cover__description iUp" id="hitokoto">
-        <p style="display: none">加载中...</p>
         <p>如何得与凉风约，不共尘沙一并来！</p>
         <footer>-「中牟道中」</footer>
     </blockquote>
@@ -226,17 +204,17 @@
         <nav class="cover-navigation navigation--social">
             <ul class="navigation">
                 <li class="navigation__item">
-                    <a href="https://github.com/Reater02" target="_blank" rel="noopener" title="GitHub">
+                    <a href="https://github.com/Reater02" target="_blank" rel="noopener" aria-label="GitHub">
                         <i class="social iconfont icon-github"></i>
                     </a>
                 </li>
                 <li class="navigation__item">
-                    <a href="https://www.zhihu.com/people/reater" target="_blank" rel="noopener" title="知乎">
+                    <a href="https://www.zhihu.com/people/reater" target="_blank" rel="noopener" aria-label="知乎">
                         <i class="social iconfont icon-zhihu"></i>
                     </a>
                 </li>
                 <li class="navigation__item">
-                    <a href="mailto:601632132@qq.com" title="邮箱">
+                    <a href="mailto:601632132@qq.com" aria-label="邮箱">
                         <i class="social iconfont icon-email"></i>
                     </a>
                 </li>
@@ -245,73 +223,76 @@
     </div>
 
     <div class="panel-cover--overlay cover-slate"></div>
-</body>
 
 <script>
-    // iUp动画模块
-    var iUp = (function () {
-        var time = 0;
-        var duration = 150;
-        
-        return {
-            clean: function() { time = 0; },
-            up: function(element) {
-                setTimeout(function() {
-                    element.classList.add("up");
-                }, time);
-                time += duration;
-            },
-            down: function(element) {
-                element.classList.remove("up");
-            },
-            toggle: function(element) {
-                setTimeout(function() {
-                    element.classList.toggle("up");
-                }, time);
-                time += duration;
-            }
-        };
-    })();
+    // 初始化动画
+    document.querySelectorAll('.iUp').forEach(el => {
+        setTimeout(() => el.classList.add('up'), 100);
+    });
 
-    // 增强的图片加载逻辑
+    // 增强的背景加载逻辑
     async function loadBingBackground() {
         const bgStatus = document.getElementById('bgStatus');
-        const panel = document.querySelector('#panel');
+        const panel = document.querySelector('.panel-cover');
         const MAX_RETRIES = 3;
         let retryCount = 0;
 
+        // 检查缓存
+        const today = new Date().toDateString();
+        const cachedBg = localStorage.getItem('bingBg');
+        if (cachedBg) {
+            const { date, url } = JSON.parse(cachedBg);
+            if (date === today) {
+                panel.style.backgroundImage = `url("${url}")`;
+                return;
+            }
+        }
+
         async function attemptLoad() {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000);
+
             try {
                 bgStatus.style.display = 'block';
                 const proxyUrl = 'https://api.allorigins.win/raw?url=';
                 const url = encodeURIComponent('https://www.bing.com/HPImageArchive.aspx?format=js&n=8');
-                const jsonResponse = await fetch(proxyUrl + url);
                 
-                if (!jsonResponse.ok) throw new Error(`HTTP错误 ${jsonResponse.status}`);
-                const data = await jsonResponse.json();
+                const response = await fetch(proxyUrl + url, { 
+                    signal: controller.signal 
+                });
+                clearTimeout(timeoutId);
+
+                if (!response.ok) throw new Error(`HTTP错误 ${response.status}`);
+                const data = await response.json();
                 const images = data.images;
                 const randomImage = images[Math.floor(Math.random() * images.length)];
                 const imgUrl = proxyUrl + encodeURIComponent(`https://www.bing.com${randomImage.url}`);
 
+                // 预加载图片
                 await new Promise((resolve, reject) => {
                     const img = new Image();
                     img.onload = () => {
                         panel.style.backgroundImage = `url("${imgUrl}")`;
+                        localStorage.setItem('bingBg', JSON.stringify({
+                            date: today,
+                            url: imgUrl
+                        }));
+                        
+                        // 添加版权信息
+                        const copyrightEl = document.createElement('div');
+                        copyrightEl.className = 'bg-copyright';
+                        const cleanedCopyright = randomImage.copyright.replace(/(.*?)\s*$.*?$/, '$1');
+                        copyrightEl.textContent = `${cleanedCopyright} (Bing每日壁纸)`;
+                        document.body.appendChild(copyrightEl);
+                        
                         resolve();
                     };
-                    img.onerror = () => reject(new Error('图片加载失败'));
+                    img.onerror = reject;
                     img.src = imgUrl;
-                    setTimeout(() => reject('加载超时'), 10000);
                 });
 
-                // 添加版权信息
-                const copyrightEl = document.createElement('div');
-                copyrightEl.className = 'bg-copyright';
-                const cleanedCopyright = randomImage.copyright.replace(/(.*?)\s*$.*?$/, '$1');
-                copyrightEl.innerHTML = `${cleanedCopyright} (Bing每日壁纸)`;
-                document.body.appendChild(copyrightEl);
-
             } catch (error) {
+                clearTimeout(timeoutId);
                 if (retryCount < MAX_RETRIES) {
                     retryCount++;
                     return attemptLoad();
@@ -324,40 +305,33 @@
 
         try {
             await attemptLoad();
-        } catch (error) {
-            console.warn('使用备用背景:', error);
+        } catch {
             panel.style.backgroundImage = 'var(--main-gradient)';
         }
     }
-    
-    // 优化后的移动端菜单控制
+
+    // 移动菜单控制
     function initMobileMenu() {
         const btn = document.querySelector('.btn-mobile-menu');
         const nav = document.querySelector('.navigation-wrapper');
         
         if (!btn || !nav) return;
 
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
             const isVisible = nav.classList.contains('visible');
-            
-            // 使用 CSS 类控制动画
-            nav.style.animation = isVisible ? 
-                'menuSlide 0.3s ease reverse' : 
-                'menuSlide 0.3s ease';
-            
-            // 切换可见状态
             nav.classList.toggle('visible', !isVisible);
-            
-            // 控制页面滚动
             document.body.style.overflow = isVisible ? '' : 'hidden';
-            
-            // 处理动画结束事件
-            const handleAnimationEnd = () => {
-                nav.removeEventListener('animationend', handleAnimationEnd);
-                nav.style.animation = '';
-            };
-            
-            nav.addEventListener('animationend', handleAnimationEnd);
+        });
+
+        // 点击外部关闭
+        document.addEventListener('click', (e) => {
+            if (nav.classList.contains('visible') && 
+                !nav.contains(e.target) && 
+                !btn.contains(e.target)) {
+                nav.classList.remove('visible');
+                document.body.style.overflow = '';
+            }
         });
     }
 
@@ -365,35 +339,53 @@
     async function loadHitokoto() {
         const target = document.getElementById('hitokoto');
         try {
-            const response = await fetch('https://v1.hitokoto.cn');
-            if (!response.ok) throw new Error('网络异常');
+            const controller = new AbortController();
+            setTimeout(() => controller.abort(), 5000);
+            
+            const response = await fetch('https://v1.hitokoto.cn', { 
+                signal: controller.signal 
+            });
+            
             const data = await response.json();
             target.innerHTML = `
                 <p>${data.hitokoto}</p>
                 <footer>-「${data.from}」</footer>
             `;
-        } catch (error) {
+        } catch {
             target.innerHTML = `
-                <p style="color:#999;">加载失败，请稍后再试...</p>
+                <p style="color:#999">加载失败，使用默认诗句</p>
                 <p>如何得与凉风约，不共尘沙一并来！</p>
                 <footer>-「中牟道中」</footer>
             `;
         }
     }
 
-    // 主初始化
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.iUp').forEach(iUp.up);
+    // 头像加载处理
+    function handleAvatarLoad() {
+        const placeholder = document.querySelector('.img-placeholder');
+        const avatarImg = document.querySelector('.js-avatar');
+        
+        if (avatarImg.complete) {
+            placeholder.style.display = 'none';
+            avatarImg.style.opacity = 1;
+        } else {
+            avatarImg.addEventListener('load', () => {
+                placeholder.style.display = 'none';
+                avatarImg.style.opacity = 1;
+            });
+            avatarImg.addEventListener('error', () => {
+                placeholder.style.display = 'block';
+            });
+        }
+    }
+
+    // 初始化
+    document.addEventListener('DOMContentLoaded', () => {
         loadBingBackground();
         initMobileMenu();
         loadHitokoto();
-
-        // 预加载头像
-        const avatarImg = document.querySelector('.js-avatar');
-        if (avatarImg) {
-            avatarImg.addEventListener('load', () => avatarImg.style.opacity = 1);
-            if (avatarImg.complete) avatarImg.style.opacity = 1;
-        }
+        handleAvatarLoad();
     });
 </script>
+</body>
 </html>
