@@ -97,55 +97,52 @@
         transform: scale(1.1);
     }
         
-        @media (max-width: 768px) {
-            :root {
-                --avatar-size: 100px;
-                --social-icon-size: 1.5rem;
-            }
-            .panel-cover {
-                background-attachment: scroll;
-            }
-            .bg-status {
-                font-size: 12px;
-                padding: 6px 12px;
-            }
-        }
-
-        .bg-copyright {
-            position: fixed;
-            bottom: 15px;
-            right: 20px;
-            color: rgba(255,255,255,0.8);
-            font-size: 12px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-        }
-
-        .btn-mobile-menu {
-            display: block;
-        }
-        
-        .navigation-wrapper {
-            display: none;
-            position: fixed;
-            top: 70px;
-            left: 0;
-            right: 0;
-            background: rgba(255,255,255,0.95);
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        
-        .navigation-wrapper.visible {
-            display: block;
-            animation: menuSlide 0.3s ease-out;
-        }
-
-        @keyframes menuSlide {
-            from { transform: translateY(-20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
+       @media (max-width: 768px) {
+    :root {
+        --avatar-size: 100px;
+        --social-icon-size: 1.5rem;
     }
+    .panel-cover {
+        background-attachment: scroll;
+    }
+    .bg-status {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+    
+    /* 移动端菜单按钮显示 */
+    .btn-mobile-menu {
+        display: block;
+    }
+    
+    /* 导航菜单样式 */
+    .navigation-wrapper {
+        display: none;
+        position: fixed;
+        top: 70px;
+        left: 0;
+        right: 0;
+        background: rgba(255,255,255,0.95);
+        padding: 20px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+           
+    .btn-mobile-menu:active {
+    transform: scale(0.9);
+    transition: transform 0.1s ease;
+}
+    .navigation-wrapper.visible {
+        display: block;
+        animation: menuSlide 0.3s ease-out;
+    }
+} /* 添加闭合括号 */
         
+
+/* 动画定义应放在媒体查询外部 */
+@keyframes menuSlide {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
     </style>
 </head>
 
@@ -161,6 +158,8 @@
             <a href="#" class="blog-button">
                 <div class="img">
                     <div class="img-placeholder"></div>
+                      </a> <!-- 添加闭合 -->
+        </div> <!-- 添加闭合 -->
                     <img src="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@latest/assets/img/personlogo.webp"
                          data-fallback="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@latest/assets/img/personlogo.jpg"
                          alt="Reater头像"
@@ -330,7 +329,7 @@
                 const animationType = isVisible ? 'fadeOutUp' : 'fadeInDown';
                 
                 // 添加动画类
-                nav.classList.add('animate__animated', `animate__${animationType}`);
+            nav.style.animation = 'menuSlide 0.3s ease-out';
                 
                 // 动画结束后处理
                 nav.addEventListener('animationend', () => {
