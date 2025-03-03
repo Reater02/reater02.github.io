@@ -11,16 +11,16 @@
     <title>Reater02</title>
     
     <!-- 样式表 -->
-    <link rel="stylesheet" href="https://raw.githubusercontent.com/Reater02/reater02.github.io/493df04ee51240174838c80fdafe5a020f3d9c13/assets/css/onlinewebfonts.css">
-    <link rel="stylesheet" href="https://raw.githubusercontent.com/Reater02/reater02.github.io/493df04ee51240174838c80fdafe5a020f3d9c13/assets/css/vno.css">
-    <link rel="stylesheet" href="https://raw.githubusercontent.com/Reater02/reater02.github.io/493df04ee51240174838c80fdafe5a020f3d9c13/assets/css/iconfont.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@493df04ee51240174838c80fdafe5a020f3d9c13/assets/css/onlinewebfonts.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@493df04ee51240174838c80fdafe5a020f3d9c13/assets/css/vno.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@493df04ee51240174838c80fdafe5a020f3d9c13/assets/css/iconfont.css">
     
     <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="https://raw.githubusercontent.com/Reater02/reater02.github.io/493df04ee51240174838c80fdafe5a020f3d9c13/apple-touch-icon.png">
-    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/Reater02/reater02.github.io/493df04ee51240174838c80fdafe5a020f3d9c13/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@493df04ee51240174838c80fdafe5a020f3d9c13/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@493df04ee51240174838c80fdafe5a020f3d9c13/favicon.ico">
 
     <style>
-        /* 基础样式 */
+        /* 基础样式保持不变 */
         .img-placeholder {
             position: absolute;
             width: 120px;
@@ -104,45 +104,164 @@
 
     <!-- 主内容区 -->
     <header id="panel" class="panel-cover">
-        <!-- 保持原有内容结构不变 -->
-        <!-- ... 其他页面内容保持不变 ... -->
+        <div class="panel-main">
+            <div class="panel-main__inner panel-inverted">
+                <div class="panel-main__content">
+                    <!-- 头像部分 -->
+                    <div class="ih-item circle effect right_to_left">
+                        <a href="#" class="blog-button">
+                            <div class="img">
+                                <div class="img-placeholder"></div>
+                                <img src="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@gh-pages/assets/img/personlogo.webp"
+                                    data-fallback="https://cdn.jsdelivr.net/gh/Reater02/reater02.github.io@gh-pages/assets/img/personlogo.jpg"
+                                    alt="Reater头像"
+                                    class="js-avatar iUp profilepic"
+                                    loading="lazy"
+                                    width="120"
+                                    height="120"
+                                    onerror="this.onerror=null;this.src=this.dataset.fallback">
+                            </div>
+                            <div class="info iUp">
+                                <div class="info-back">
+                                    <h2>Star</h2>
+                                    <p>Shine</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- 标题区 -->
+                    <h1 class="panel-cover__title panel-title iUp">
+                        <a href="#">Reater</a>
+                    </h1>
+                    <p class="panel-cover__subtitle panel-subtitle iUp">Everything Will Be Better</p>
+                    <hr class="panel-cover__divider iUp">
+
+                    <!-- 诗句引用 -->
+                    <blockquote class="panel-cover__description iUp" id="hitokoto">
+                        <p>如何得与凉风约，不共尘沙一并来！</p>
+                        <footer>-「中牟道中」</footer>
+                    </blockquote>
+
+                    <!-- 导航菜单 -->
+                    <div class="navigation-wrapper iUp">
+                        <nav class="cover-navigation cover-navigation--primary">
+                            <ul class="navigation">
+                                <li class="navigation__item"><a href="/" class="blog-button">首页</a></li>
+                                <li class="navigation__item"><a href="https://reater.cn:7070/" target="_blank" rel="noopener noreferrer" class="blog-button">Rcloud</a></li>
+                                <li class="navigation__item"><a href="https://reater.cn:5001/" target="_blank" rel="noopener noreferrer" class="blog-button">群晖NAS</a></li>
+                                <li class="navigation__item"><a href="https://github.com/Reater02/Reater02.github.io" target="_blank" rel="noopener noreferrer" class="blog-button">关于本站</a></li>
+                            </ul>
+                        </nav>
+
+                        <!-- 社交链接 -->
+                        <nav class="cover-navigation navigation--social">
+                            <ul class="navigation">
+                                <li class="navigation__item">
+                                    <a href="https://github.com/Reater02" target="_blank" rel="noopener noreferrer" title="GitHub">
+                                        <i class="social iconfont icon-github"></i>
+                                    </a>
+                                </li>
+                                <li class="navigation__item">
+                                    <a href="https://www.zhihu.com/people/reater" target="_blank" rel="noopener noreferrer" title="知乎">
+                                        <i class="social iconfont icon-zhihu"></i>
+                                    </a>
+                                </li>
+                                <li class="navigation__item">
+                                    <a href="mailto:601632132@qq.com" title="邮箱">
+                                        <i class="social iconfont icon-email"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-cover--overlay cover-slate"></div>
+        </div>
+
+        <!-- 页脚 -->
+        <div class="remark iUp">
+            <p class="power">
+                Powered by 
+                <a href="https://hitokoto.cn/" target="_blank" rel="noopener noreferrer">Hitokoto</a> 
+                & 
+                <a href="https://www.jsdelivr.com/" target="_blank" rel="noopener noreferrer">jsDelivr</a>
+            </p>
+        </div>
     </header>
 
     <!-- 脚本 -->
-    <script src="https://raw.githubusercontent.com/Reater02/reater02.github.io/493df04ee51240174838c80fdafe5a020f3d9c13/assets/js/main.js"></script>
-    
     <script>
-        // 动态加载背景图
-        (async function() {
+        // ================== iUp动画模块（修复语法错误） ==================
+        var iUp = (function () {
+            var time = 0;
+            var duration = 150;
+            
+            return {
+                clean: function() { time = 0; },
+                up: function(element) {
+                    setTimeout(function() {
+                        element.classList.add("up");
+                    }, time);
+                    time += duration;
+                },
+                down: function(element) {
+                    element.classList.remove("up");
+                },
+                toggle: function(element) {
+                    setTimeout(function() {
+                        element.classList.toggle("up");
+                    }, time);
+                    time += duration;
+                }
+            };
+        })();
+
+        // ================== 背景加载模块（修复JSON解析问题） ==================
+        async function loadBingBackground() {
             const bgStatus = document.getElementById('bgStatus');
             const panel = document.querySelector('#panel');
             
             try {
                 bgStatus.style.display = 'block';
                 
+                // 获取并处理JSON数据
                 const response = await fetch('/assets/json/images.json');
                 const jsonText = await response.text();
                 
-                // 解析JSONP格式数据
-                const jsonString = jsonText
-                    .replace(/^getBingImages$/, '')
-                    .replace(/$;?\s*$/, '');
-                const imgUrls = JSON.parse(jsonString);
+                // 处理JSONP格式
+                const jsonData = JSON.parse(
+                    jsonText
+                        .replace(/^getBingImages$/, '')
+                        .replace(/$;?\s*$/, '')
+                );
 
                 // 随机选择图片
-                const randomIndex = Math.floor(Math.random() * imgUrls.length);
-                const imgUrl = `https://www.bing.com${imgUrls[randomIndex]}`;
+                const randomIndex = Math.floor(Math.random() * jsonData.length);
+                const imgUrl = 'https://www.bing.com' + jsonData[randomIndex];
 
                 // 预加载验证
+                const img = new Image();
+                img.crossOrigin = "anonymous";
+                
                 await new Promise((resolve, reject) => {
-                    const img = new Image();
                     img.onload = resolve;
-                    img.onerror = reject;
+                    img.onerror = () => reject(new Error('CORS限制'));
                     img.src = imgUrl;
                     setTimeout(() => reject('加载超时'), 10000);
                 });
 
                 panel.style.backgroundImage = `url(${imgUrl})`;
+                
+                // 添加版权信息
+                const copyrightMatch = imgUrl.match(/OHR\.(\w+?)_/);
+                if(copyrightMatch) {
+                    const copyrightEl = document.createElement('div');
+                    copyrightEl.className = 'bg-copyright';
+                    copyrightEl.textContent = copyrightMatch[1].replace(/([A-Z])/g, ' $1').trim() + ' (Bing每日壁纸)';
+                    document.body.appendChild(copyrightEl);
+                }
 
             } catch (error) {
                 console.error('背景加载失败:', error);
@@ -150,7 +269,59 @@
             } finally {
                 bgStatus.style.display = 'none';
             }
-        })();
+        }
+
+        // ================== 主初始化逻辑 ==================
+        document.addEventListener('DOMContentLoaded', function () {
+            // 初始化动画
+            document.querySelectorAll('.iUp').forEach(element => {
+                iUp.up(element);
+            });
+
+            // 加载背景图
+            loadBingBackground();
+
+            // 加载Hitokoto
+            const xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (this.readyState === 4 && this.status === 200) {
+                    const res = JSON.parse(this.responseText);
+                    const target = document.getElementById('hitokoto');
+                    if(target) {
+                        target.innerHTML = `${res.hitokoto}<br/><footer>-「${res.from}」</footer>`;
+                    }
+                }
+            };
+            xhr.open("GET", "https://v1.hitokoto.cn", true);
+            xhr.send();
+
+            // 移动端菜单交互
+            const btnMobileMenu = document.querySelector('.btn-mobile-menu');
+            const navigationWrapper = document.querySelector('.navigation-wrapper');
+            
+            if (btnMobileMenu && navigationWrapper) {
+                btnMobileMenu.addEventListener('click', function() {
+                    const isVisible = navigationWrapper.classList.contains('visible');
+                    
+                    // 动画处理
+                    const animationEndHandler = function() {
+                        navigationWrapper.classList.remove('animated', 'bounceOutUp');
+                        navigationWrapper.removeEventListener('animationend', animationEndHandler);
+                    };
+
+                    if (isVisible) {
+                        navigationWrapper.classList.add('animated', 'bounceOutUp');
+                        navigationWrapper.addEventListener('animationend', animationEndHandler);
+                    } else {
+                        navigationWrapper.classList.add('visible', 'animated', 'bounceInDown');
+                    }
+
+                    // 切换按钮图标
+                    this.classList.toggle('icon-angleup');
+                    this.classList.toggle('icon-list');
+                });
+            }
+        });
     </script>
 </body>
 </html>
