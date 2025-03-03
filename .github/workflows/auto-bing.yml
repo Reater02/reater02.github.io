@@ -3,43 +3,61 @@ name: Auto Update Bing Images CI
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 1 * * *"
+    - cron: "0 1 * * *"  # UTC时间1点（北京时间9点）
   push:
     branches: [ gh-pages ]
-  pull_request:
-    branches: [ gh-pages ]
+    paths-ignore:  # 忽略自身触发
+      - 'assets/json/images.json'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # Checkout（明确指定分支）
+      # 1. 检出代码（强制gh-pages分支）
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: gh-pages
+          fetch-depth: 0  # 获取完整提交历史
 
-      # Node.js 12.x
-      - name: Use Node.js 12.x
-        uses: actions/setup-node@v2
+      # 2. 设置Node.js环境
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: 12.x
+          node-version: 16.x  # LTS版本
+          cache: 'npm'
 
-      # 执行脚本
+      # 3. 安装依赖（如有需要）
+      - name: Install dependencies
+        run: npm install https
+
+      # 4. 执行Bing图片抓取脚本
       - name: Run Bing Image Script
         run: node ./assets/js/bing.js
+        env:
+          NODE_OPTIONS: '--no-warnings'  # 禁用Node警告
 
-      # 提交变更（仅当有实际修改时）
+      # 5. 提交变更
       - name: Commit changes
+        id: commit
         run: |
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git config user.name "github-actions[bot]"
-          git diff --quiet || (git add . && git commit -m "[bot] update images.json")
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          
+          # 检测是否有实际变更
+          if git diff --quiet --exit-code; then
+            echo "::set-output name=has_changes::false"
+          else
+            git add ./assets/json/images.json
+            git commit -m "[Bot] Update Bing images ($(date +'%Y-%m-%d'))"
+            echo "::set-output name=has_changes::true"
+          fi
 
-      # 推送（仅限非PR事件 + 强制使用正确Token）
+      # 6. 推送变更（仅在需要时）
       - name: Push changes
-        if: github.event_name != 'pull_request'
-        uses: ad-m/github-push-action@master
+        if: steps.commit.outputs.has_changes == 'true'
+        uses: ad-m/github-push-action@v0.6.0  # 使用固定版本
         with:
-          github_token: ${{ secrets.GH_TOKEN }}
-          branch: gh-pages  # 明确指定推送目标分支
+          github_token: ${{ secrets.GITHUB_TOKEN }}  # 使用默认Token
+          branch: gh-pages
+          force: false
