@@ -192,13 +192,18 @@
 
   <script>
       // 修复箭头函数作用域问题（SyntaxError）
+   <script>
+    // ====== 修复后的iUp模块 ======
     var iUp = (function () {
         var time = 0;
         var duration = 150;
         
         return {
-            clean: function() { time = 0; },
+            clean: function() { 
+                time = 0; 
+            },
             up: function(element) {
+                var _this = this;
                 setTimeout(function() {
                     element.classList.add("up");
                 }, time);
@@ -208,6 +213,7 @@
                 element.classList.remove("up");
             },
             toggle: function(element) {
+                var _this = this;
                 setTimeout(function() {
                     element.classList.toggle("up");
                 }, time);
