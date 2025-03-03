@@ -3,10 +3,11 @@ name: Auto Update Bing Images CI
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 1 * * *"
+    - cron: "0 1 * * *"  # UTC时间1点（北京时间9点）
   push:
-    branches: [ gh-pages ]
-    paths-ignore: 
+    branches: [gh-pages]
+    paths:
+      - 'assets/js/bing.js'
       - 'assets/json/images.json'
 
 jobs:
@@ -14,36 +15,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: gh-pages
-          fetch-depth: 0
 
-      - name: Use Node.js 12.x
-        uses: actions/setup-node@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 12.x
+          node-version: 20.x
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install axios cheerio
 
       - name: Run Bing Image Script
         run: node ./assets/js/bing.js
 
       - name: Commit changes
-        id: commit-step
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
-          
-          if git diff --exit-code --quiet -- ./assets/json/images.json; then
-            echo "has_changes=false" >> $GITHUB_OUTPUT
-          else
-            git add ./assets/json/images.json
-            git commit -m "[Bot] Update Bing images ($(date +'%Y-%m-%d'))"
-            echo "has_changes=true" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Push changes
-        if: github.event_name != 'pull_request' && steps.commit-step.outputs.has_changes == 'true'
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GH_TOKEN }}
-          branch: gh-pages
+          git add ./assets/json/images.json
+          git commit -m "[Bot] Update Bing images $(date +'%Y-%m-%d')"
+          git push
