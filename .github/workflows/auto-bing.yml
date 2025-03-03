@@ -13,23 +13,33 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    # checkout
-    - name: checkout
-      uses: actions/checkout@v2
-    # setup nodejs
-    - name: Use Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: 12.x
-    - run: node ./assets/js/bing.js
-    # commit
-    - name: commit file
-      run: |
-        git config --local user.email 'github-actions[bot]@users.noreply.github.com'
-        git config --local user.name 'github-actions[bot]'
-        git diff --exit-code || git add . && git commit -am '[bot] update images.json' --allow-empty
-    # push 
-    - name: push changes
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GH_TOKEN }}
+      # Checkout（明确指定分支）
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: gh-pages
+
+      # Node.js 12.x
+      - name: Use Node.js 12.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 12.x
+
+      # 执行脚本
+      - name: Run Bing Image Script
+        run: node ./assets/js/bing.js
+
+      # 提交变更（仅当有实际修改时）
+      - name: Commit changes
+        run: |
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git diff --quiet || (git add . && git commit -m "[bot] update images.json")
+
+      # 推送（仅限非PR事件 + 强制使用正确Token）
+      - name: Push changes
+        if: github.event_name != 'pull_request'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GH_TOKEN }}
+          branch: gh-pages  # 明确指定推送目标分支
