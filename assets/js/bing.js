@@ -1,29 +1,38 @@
-const fs = require('fs');
-const path = require('path');
-const axios = require('axios');
-const cheerio = require('cheerio');
+const https = require('https')
+const fs = require('fs')
 
-async function fetchBingImages() {
-  try {
-    const response = await axios.get('https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=8&mkt=zh-CN');
-    const images = response.data.images.map(img => img.url);
-    
-    // 确保目录存在
-    const jsonDir = path.join(__dirname, '../json');
-    if (!fs.existsSync(jsonDir)) {
-      fs.mkdirSync(jsonDir, { recursive: true });
-    }
-    
-    // 写入标准JSON文件
-    const outputPath = path.join(jsonDir, 'images.json');
-    fs.writeFileSync(outputPath, JSON.stringify(images, null, 2));
-    
-    console.log('图片数据已保存至:', outputPath);
-    
-  } catch (error) {
-    console.error('获取Bing图片失败:', error);
-    process.exit(1);
-  }
+const options = {
+  hostname: 'www.bing.com',
+  port: 443,
+  path: '/HPImageArchive.aspx?format=js&idx=0&n=8',
+  method: 'GET'
 }
 
-fetchBingImages();
+const req = https.request(options, bing_res => {
+  let bing_body = [], bing_data = {};
+  bing_res.on('data', (chunk) => {
+    bing_body.push(chunk);
+  });
+  bing_res.on('end', () => {
+    bing_body = Buffer.concat(bing_body);
+    bing_data = JSON.parse(bing_body.toString());
+    let img_array = bing_data.images;
+    let img_url = [];
+    img_array.forEach(img => {
+      img_url.push(img.url);
+    });
+    var jsonpStr = "getBingImages(" + JSON.stringify(img_url) + ")";
+    fs.writeFile('./assets/json/images.json', jsonpStr, (err) => {
+      if (err) {
+        throw err;
+      }
+      console.log("JSON data is saved: " + jsonpStr);
+    });
+  });
+})
+
+req.on('error', error => {
+  console.error(error)
+})
+
+req.end()
