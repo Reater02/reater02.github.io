@@ -3,38 +3,33 @@ name: Auto Update Bing Images CI
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 1 * * *"  # UTC时间1点（北京时间9点）
+    - cron: "0 1 * * *"
   push:
-    branches: [gh-pages]
-    paths:
-      - 'assets/js/bing.js'
-      - 'assets/json/images.json'
+    branches: [ gh-pages ]
+  pull_request:
+    branches: [ gh-pages ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          ref: gh-pages
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20.x
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm install axios cheerio
-
-      - name: Run Bing Image Script
-        run: node ./assets/js/bing.js
-
-      - name: Commit changes
-        run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
-          git add ./assets/json/images.json
-          git commit -m "[Bot] Update Bing images $(date +'%Y-%m-%d')"
-          git push
+    # checkout
+    - name: checkout
+      uses: actions/checkout@v2
+    # setup nodejs
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 20.x
+    - run: node ./assets/js/bing.js
+    # commit
+    - name: commit file
+      run: |
+        git config --local user.email 'github-actions[bot]@users.noreply.github.com'
+        git config --local user.name 'github-actions[bot]'
+        git diff --exit-code || git add . && git commit -am '[bot] update images.json' --allow-empty
+    # push 
+    - name: push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GH_TOKEN }}
