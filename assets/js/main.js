@@ -45,11 +45,6 @@ function getBingImages(imgUrls) {
 	sessionStorage.setItem(indexName, index);
 }
 
-function decryptEmail(encoded) {
-	var address = atob(encoded);
-	window.location.href = "mailto:" + address;
-}
-
 document.addEventListener('DOMContentLoaded', function () {
 	// 获取一言数据
 	var xhr = new XMLHttpRequest();
