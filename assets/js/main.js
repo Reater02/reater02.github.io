@@ -1,57 +1,104 @@
-// iUp动画模块（修正语法版）
-const iUp = (function () {
-    let time = 0;
-    const duration = 150;
-    
-    return {
-        clean: () => time = 0,
-        up: (element) => {
-            setTimeout(() => element.classList.add("up"), time);
-            time += duration;
-        },
-        down: (element) => element.classList.remove("up"),
-        toggle: (element) => {
-            setTimeout(() => element.classList.toggle("up"), time);
-            time += duration;
-        }
-    };
+var iUp = (function () {
+	var time = 0,
+		duration = 150,
+		clean = function () {
+			time = 0;
+		},
+		up = function (element) {
+			setTimeout(function () {
+				element.classList.add("up");
+			}, time);
+			time += duration;
+		},
+		down = function (element) {
+			element.classList.remove("up");
+		},
+		toggle = function (element) {
+			setTimeout(function () {
+				element.classList.toggle("up");
+			}, time);
+			time += duration;
+		};
+	return {
+		clean: clean,
+		up: up,
+		down: down,
+		toggle: toggle
+	};
 })();
 
-// 移动端菜单交互（修复版）
-function setupMobileMenu() {
-    const btn = document.querySelector('.btn-mobile-menu');
-    const nav = document.querySelector('.navigation-wrapper');
-    
-    if (!btn || !nav) return;
-
-    btn.addEventListener('click', () => {
-        const isVisible = nav.classList.contains('visible');
-        
-        nav.classList.toggle('visible', !isVisible);
-        nav.classList.toggle('animated', true);
-        nav.classList.toggle(
-            isVisible ? 'bounceOutUp' : 'bounceInDown'
-        );
-
-        // 按钮图标切换
-        btn.classList.toggle('icon-angleup');
-        btn.classList.toggle('icon-list');
-    });
+function getBingImages(imgUrls) {
+	/**
+	 * 获取Bing壁纸
+	 * 先使用 GitHub Action 每天获取 Bing 壁纸 URL 并更新 images.json 文件
+	 * 然后读取 images.json 文件中的数据
+	 */
+	var indexName = "bing-image-index";
+	var index = sessionStorage.getItem(indexName);
+	var panel = document.querySelector('#panel');
+	if (isNaN(index) || index == 7) index = 0;
+	else index++;
+	var imgUrl = imgUrls[index];
+	var url = "https://www.cn.bing.com" + imgUrl;
+	panel.style.background = "url('" + url + "') center center no-repeat #666";
+	panel.style.backgroundSize = "cover";
+	sessionStorage.setItem(indexName, index);
 }
 
-// 初始化入口
-document.addEventListener('DOMContentLoaded', () => {
-    // 初始化动画
-    document.querySelectorAll('.iUp').forEach(iUp.up);
-    
-    // 设置移动菜单
-    setupMobileMenu();
+function decryptEmail(encoded) {
+	var address = atob(encoded);
+	window.location.href = "mailto:" + address;
+}
 
-    // 头像加载处理
-    const avatar = document.querySelector('.js-avatar');
-    if (avatar) {
-        avatar.addEventListener('load', () => {
-            avatar.style.opacity = 1;
-        });
-    }
+document.addEventListener('DOMContentLoaded', function () {
+	// 获取一言数据
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function () {
+		if (this.readyState == 4 && this.status == 200) {
+			var res = JSON.parse(this.responseText);
+			document.getElementById('description').innerHTML = res.hitokoto + "<br/> -「<strong>" + res.from + "</strong>」";
+		}
+	};
+	xhr.open("GET", "https://v1.hitokoto.cn", true);
+	xhr.send();
+
+	var iUpElements = document.querySelectorAll(".iUp");
+	iUpElements.forEach(function (element) {
+		iUp.up(element);
+	});
+
+	var avatarElement = document.querySelector(".js-avatar");
+	avatarElement.addEventListener('load', function () {
+		avatarElement.classList.add("show");
+	});
+});
+
+var btnMobileMenu = document.querySelector('.btn-mobile-menu__icon');
+var navigationWrapper = document.querySelector('.navigation-wrapper');
+
+btnMobileMenu.addEventListener('click', function () {
+	if (navigationWrapper.style.display == "block") {
+		navigationWrapper.addEventListener('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+			navigationWrapper.classList.toggle('visible');
+			navigationWrapper.classList.toggle('animated');
+			navigationWrapper.classList.toggle('bounceOutUp');
+			navigationWrapper.removeEventListener('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', arguments.callee);
+		});
+		navigationWrapper.classList.toggle('animated');
+		navigationWrapper.classList.toggle('bounceInDown');
+		navigationWrapper.classList.toggle('animated');
+		navigationWrapper.classList.toggle('bounceOutUp');
+	} else {
+		navigationWrapper.classList.toggle('visible');
+		navigationWrapper.classList.toggle('animated');
+		navigationWrapper.classList.toggle('bounceInDown');
+	}
+	btnMobileMenu.classList.toggle('social');
+	btnMobileMenu.classList.toggle('iconfont');
+	btnMobileMenu.classList.toggle('icon-list');
+	btnMobileMenu.classList.toggle('social');
+	btnMobileMenu.classList.toggle('iconfont');
+	btnMobileMenu.classList.toggle('icon-angleup');
+	btnMobileMenu.classList.toggle('animated');
+	btnMobileMenu.classList.toggle('fadeIn');
 });
